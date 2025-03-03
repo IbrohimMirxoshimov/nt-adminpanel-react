@@ -1,20 +1,16 @@
 import { message, Switch, Table } from "antd";
-import axios from "axios";
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import api from "../api/api";
 
 function RentsPage() {
   const [rents, setRents] = useState();
+
   useEffect(() => {
-    axios
-      .get("https://library.softly.uz/api/rents", {
+    api
+      .get("/api/rents", {
         params: {
           size: 20,
           page: 1,
-        },
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDUyLCJsaWJyYXJpYW4iOnRydWUsImxpYnJhcnlJZCI6MiwibG9jYXRpb25JZCI6Miwib3duZXIiOmZhbHNlLCJtb2RlcmF0b3IiOmZhbHNlLCJleHAiOjE3NDE1NzYyMTMsImlhdCI6MTc0MDUzOTQxM30.il2ixZTXsnqZfEKoVD1L4t4EqA0s8Rqd2kzxSyr_7ek",
         },
       })
       .then((res) => {

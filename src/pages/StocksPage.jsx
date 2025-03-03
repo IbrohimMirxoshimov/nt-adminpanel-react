@@ -10,24 +10,21 @@ import {
   CloseCircleTwoTone,
 } from "@ant-design/icons";
 import AddStockDrawerAndButton from "../components/AddStockDrawerAndButton";
+import api from "../api/api";
 
 function StocksPage() {
   const [stocksState, setStocksState] = useState();
   const [currentPage, setCurrentPage] = useState(1);
-  const state = useAuthStore();
   const [loading, setLoading] = useState(false);
   const pageSize = 10;
   const [stock, setStock] = useState();
   useEffect(() => {
     setLoading(true);
-    axios
-      .get("https://library.softly.uz/api/stocks", {
+    api
+      .get("/api/stocks", {
         params: {
           size: pageSize,
           page: currentPage,
-        },
-        headers: {
-          Authorization: `Bearer ${state.token}`,
         },
       })
       .then((res) => {

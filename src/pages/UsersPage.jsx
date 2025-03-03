@@ -12,7 +12,8 @@ function UsersPage() {
   const [loading, setLoading] = useState(false);
   const pageSize = 10;
   const [user, setUser] = useState();
-  useEffect(() => {
+
+  function fetchUsers() {
     setLoading(true);
     axios
       .get("https://library.softly.uz/api/users", {
@@ -35,6 +36,10 @@ function UsersPage() {
       .finally(() => {
         setLoading(false);
       });
+  }
+
+  useEffect(() => {
+    fetchUsers();
   }, [currentPage]);
 
   if (!users) {
@@ -46,9 +51,10 @@ function UsersPage() {
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-xl font-bold">Kitobxonlar</h2>
 
-        <AddUserDrawerAndButton />
+        <AddUserDrawerAndButton onFinish={fetchUsers} />
       </div>
       <EditUserDrawer
+        onFinish={fetchUsers}
         user={user}
         setUser={setUser}
       />
@@ -83,6 +89,7 @@ function UsersPage() {
             dataIndex: "lastName",
           },
         ]}
+        rowKey={"id"}
         dataSource={users.items}
         pagination={{
           pageSize: pageSize,

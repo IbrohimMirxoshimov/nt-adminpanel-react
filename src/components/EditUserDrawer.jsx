@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import useAuthStore from "../store/my-store";
 
-function EditUserDrawer({ user, setUser }) {
+function EditUserDrawer({ user, setUser, onFinish }) {
   const authState = useAuthStore();
   const [loading, setLoading] = useState(false);
   return (
@@ -34,7 +34,7 @@ function EditUserDrawer({ user, setUser }) {
               .then((res) => {
                 console.log(res.data);
                 setUser(null);
-
+                onFinish();
                 message.success("O'zgardi");
               })
               .catch((e) => {

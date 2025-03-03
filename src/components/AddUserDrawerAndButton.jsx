@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import useAuthStore from "../store/my-store";
 
-function AddUserDrawerAndButton() {
+function AddUserDrawerAndButton({ onFinish }) {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const authState = useAuthStore();
   const [loading, setLoading] = useState(false);
@@ -27,6 +27,7 @@ function AddUserDrawerAndButton() {
         destroyOnClose
       >
         <Form
+          layout="vertical"
           onFinish={(values) => {
             setLoading(true);
             axios
@@ -44,6 +45,8 @@ function AddUserDrawerAndButton() {
                 setIsOpenDrawer(false);
 
                 message.success("Qo'shildi");
+
+                onFinish();
               })
               .catch((e) => {
                 console.error(e);
