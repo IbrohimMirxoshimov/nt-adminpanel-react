@@ -1,20 +1,37 @@
 import { message, Switch, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import api from "../api/api";
+import AddRentDrawerAndButton from "../components/AddRentDrawerAndButton";
 
 function RentsPage() {
   const [rents, setRents] = useState();
-
+  const [books, setBooks] = useState();
   useEffect(() => {
     api
       .get("/api/rents", {
         params: {
-          size: 20,
+          size: 10,
           page: 1,
         },
       })
       .then((res) => {
-        console.log(res.data.items);
+        // console.log(res.data.items);
+
+        const books_ids = res.data.items.map((item) => {
+          return item.stock.bookId;
+        });
+
+        api
+          .get("/api/books", {
+            params: {
+              id: books_ids,
+            },
+          })
+          .then((res) => {
+            setBooks(res.data.items);
+          });
+
+        // bookids [1,2,3,4]
         setRents(res.data.items);
       })
       .catch((e) => {
@@ -25,10 +42,15 @@ function RentsPage() {
   }, []);
 
   return (
-    <div>
+    <div className="w-full">
       <h2>Ijaralar</h2>
-
+      <AddRentDrawerAndButton />
       <Table
+        scroll={{
+          x: 1000,
+        }}
+        size="middle"
+        className="w-full"
         bordered
         loading={rents ? false : true}
         columns={[
@@ -81,9 +103,34 @@ function RentsPage() {
               );
             },
           },
+          {
+            key: "stock",
+            title: "Zaxira kitob",
+            dataIndex: "stock",
+            render: (item) => {
+              return (
+                <ZaxiraKitobKatagi
+                  stock={item}
+                  books={books}
+                />
+              );
+            },
+          },
         ]}
         dataSource={rents}
       />
+    </div>
+  );
+}
+
+function ZaxiraKitobKatagi({ stock, books }) {
+  const book = books?.find((item) => {
+    return item.id === stock.bookId;
+  });
+
+  return (
+    <div>
+      {stock.id}/{stock.bookId} {book?.name}
     </div>
   );
 }
