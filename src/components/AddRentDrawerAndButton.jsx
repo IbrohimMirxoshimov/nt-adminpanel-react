@@ -1,11 +1,9 @@
-import { Button, DatePicker, Drawer, Form, Input, message, Select } from "antd";
+import { Button, Drawer, Form, Input, message, Select } from "antd";
 import { useEffect, useState } from "react";
-import useAuthStore from "../store/my-store";
 import api from "../api/api";
 
 function AddRentDrawerAndButton({ onFinish }) {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
-  const authState = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     users: [],

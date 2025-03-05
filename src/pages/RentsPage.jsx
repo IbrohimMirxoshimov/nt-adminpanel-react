@@ -2,11 +2,15 @@ import { message, Switch, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import api from "../api/api";
 import AddRentDrawerAndButton from "../components/AddRentDrawerAndButton";
+import EditRentDrawerAndButton from "../components/EditRentDrawerAndButton";
 
 function RentsPage() {
   const [rents, setRents] = useState();
   const [books, setBooks] = useState();
-  useEffect(() => {
+  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+  const [rent, setRent] = useState();
+
+  function fetchRents() {
     api
       .get("/api/rents", {
         params: {
@@ -39,12 +43,23 @@ function RentsPage() {
 
         message.error("Xatolik");
       });
+  }
+  useEffect(() => {
+    fetchRents();
   }, []);
 
   return (
     <div className="w-full">
       <h2>Ijaralar</h2>
       <AddRentDrawerAndButton />
+      <EditRentDrawerAndButton
+        rent={rent}
+        isOpen={isOpenDrawer}
+        setIsOpen={setIsOpenDrawer}
+        onFinish={() => {
+          fetchRents();
+        }}
+      />
       <Table
         scroll={{
           x: 1000,
@@ -58,6 +73,19 @@ function RentsPage() {
             key: "id",
             title: "Raqami",
             dataIndex: "id",
+            render: (id, item) => {
+              return (
+                <div
+                  onClick={() => {
+                    setIsOpenDrawer(true);
+                    setRent(item);
+                    console.log(item);
+                  }}
+                >
+                  {id}
+                </div>
+              );
+            },
           },
           {
             key: "leasedAt",

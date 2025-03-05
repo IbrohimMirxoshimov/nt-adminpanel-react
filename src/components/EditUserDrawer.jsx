@@ -2,6 +2,7 @@ import { Button, Drawer, Form, Input, InputNumber, message, Radio } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import useAuthStore from "../store/my-store";
+import api from "../api/api";
 
 function EditUserDrawer({ user, setUser, onFinish }) {
   const authState = useAuthStore();
@@ -21,9 +22,9 @@ function EditUserDrawer({ user, setUser, onFinish }) {
           initialValues={user}
           onFinish={(values) => {
             setLoading(true);
-            axios
+            api
               .put(
-                `https://library.softly.uz/api/users/${user.id}`,
+                `/api/users/${user.id}`,
                 { ...values, phone: values.phone.toString() },
                 {
                   headers: {
